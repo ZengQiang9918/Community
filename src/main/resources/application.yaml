@@ -1,0 +1,41 @@
+#Server
+server:
+  port: 8080
+  servlet:
+    context-path: /community
+
+
+#spring的配置
+spring:
+  #Thymeleaf 模板引擎
+  thymeleaf:
+    cache: false     #关闭缓存，开发过程中建议关闭
+
+  #数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community        #url别写错了
+    username: root
+    password: 19991121zq
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+
+
+
+
+#mybatis的配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.nowcoder.community.entity
+
+  #mybatis的配置文件的配置
+  configuration:
+    use-generated-keys: true   #insert时主键自动增长
+    map-underscore-to-camel-case: true    #驼峰命名法
+
+#日志级别,日志默认级别是info
+logging:
+  level:
+    com.nowcoder.community: debug

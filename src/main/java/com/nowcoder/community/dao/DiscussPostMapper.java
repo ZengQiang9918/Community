@@ -12,6 +12,16 @@ public interface DiscussPostMapper {
     //需要考虑到分页，该帖子的发布者UserId
     List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit);
 
-    //如果方法只有一个参数，并且在<if>中使用，必须使用@Param注解
+    //如果方法只有一个参数，并且在动态sql <if>中使用，必须使用@Param注解
+    //注：困惑...
     int selectDiscussPostRows(@Param("userId") int userId);
+
+    //增加帖子的方法
+    int insertDiscussPost(DiscussPost discussPost);
+
+    //查询帖子的详情
+    DiscussPost selectDiscussPostById(int id);
+
+    //插入评论的时候，需要更新DiscussPost的comment_count字段
+    int updateCommentCount(int id,int commentCount);
 }

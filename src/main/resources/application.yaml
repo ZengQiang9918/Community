@@ -22,20 +22,38 @@ spring:
       minimum-idle: 5
       idle-timeout: 30000
 
+  #邮箱 MailProperties
+  mail:
+    host: smtp.163.com
+    port: 465
+    username: zq2416983256@163.com
+    password: DUAJHRMMYVCVUEUJ
+    protocol: smtps
 
+  #redis的配置
+  redis:
+    database: 11
+    host: localhost
+    port: 6379
 
 
 #mybatis的配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.nowcoder.community.entity
-
-  #mybatis的配置文件的配置
+  #mybatis的configuration配置文件的配置
   configuration:
     use-generated-keys: true   #insert时主键自动增长
     map-underscore-to-camel-case: true    #驼峰命名法
+
+
 
 #日志级别,日志默认级别是info
 logging:
   level:
     com.nowcoder.community: debug
+
+
+#community
+community.path.domain: http://localhost:8080
+community.path.upload: d:/allwork/data/upload   #头像文件存放的地址

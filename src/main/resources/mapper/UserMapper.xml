@@ -30,7 +30,9 @@
         where email=#{email}
     </select>
 
-    <insert id="insertUser">
+    <!--声明keyProperty属性，将来传进来的user.id会被自动被赋值-->
+    <!--主键自增的情况下，插入时才生成主键，此时回填user.id-->
+    <insert id="insertUser" keyProperty="id">
         insert into user(<include refid="insertFields"></include>)
         values (#{username},#{password},#{salt},#{email},#{type},
             #{status},#{activationCode},#{headerUrl},#{createTime})

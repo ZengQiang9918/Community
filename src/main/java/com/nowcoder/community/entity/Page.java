@@ -5,10 +5,15 @@ package com.nowcoder.community.entity;
  */
 public class Page {
 
+    /**
+     * 默认情况下，Page的current的值是1,limit是10
+     */
     //当前页码
     private int current =1;
     //显示每页的数量
     private int limit=10;
+
+
     //数据总数(用于计算总页数)
     private int rows;
     //查询路径(用于复用分页的链接)

@@ -36,6 +36,14 @@ spring:
     host: localhost
     port: 6379
 
+  #rabbitmq的配置
+  rabbitmq:
+    host: 192.168.110.128
+    username: admin
+    password: 123
+    virtual-host: community
+    port: 5672
+
 
 #mybatis的配置
 mybatis:

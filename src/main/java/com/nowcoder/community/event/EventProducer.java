@@ -16,8 +16,17 @@ public class EventProducer {
      * 处理事件，发送消息
      */
     public void fireEvent(Event event){
-        //将事件发布到队列中
-        amqpTemplate.convertAndSend("queue", JSONObject.toJSONString(event));
+        //将事件发布到交换机中，指定routingKey
+        //交换机是direct类型的，路由模式
+        amqpTemplate.convertAndSend("ex","ordinary", JSONObject.toJSONString(event));
+    }
+
+    /**
+     * 处理时间，发送es处理的消息
+     */
+    public void fireESEvent(Event event){
+        //将事件发布到交换机中，指定routingKey
+        amqpTemplate.convertAndSend("ex","es", JSONObject.toJSONString(event));
     }
 
 }

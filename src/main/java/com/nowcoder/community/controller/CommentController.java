@@ -48,6 +48,7 @@ public class CommentController implements CommunityConstant {
         comment.setCreateTime(new Date());
         commentService.addComment(comment);
 
+
         //触发评论事件，发送消息
         Event event = new Event()
                 .setTopic(TOPIC_COMMENT)
@@ -65,6 +66,18 @@ public class CommentController implements CommunityConstant {
         }
         //发布消息
         eventProducer.fireEvent(event);
+
+
+        // 给帖子评论，触发帖子修改事件,发送到esqueue队列中
+        if (comment.getEntityType() == ENTITY_TYPE_POST) {
+
+            event = new Event()
+                    .setTopic(TOPIC_PUBLISH)
+                    .setUserId(comment.getUserId())
+                    .setEntityType(ENTITY_TYPE_POST)
+                    .setEntityId(discussPostId);
+            eventProducer.fireESEvent(event);
+        }
 
 
         return "redirect:/discuss/detail/" + discussPostId;

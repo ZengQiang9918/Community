@@ -67,9 +67,22 @@ public class HomeController implements CommunityConstant {
         return "index";
     }
 
+    /**
+     * 错误处理
+     */
     @RequestMapping(value = "/error",method = RequestMethod.GET)
     public String getErrorPage(){
         return "/error/500";
     }
+
+    /**
+     * 当权限不足时拒绝请求
+     */
+    @RequestMapping(value = "/denied",method = RequestMethod.GET)
+    public String getDeniedPage(){
+        return "error/404";
+    }
+
+
 
 }

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -213,10 +214,15 @@ public class LoginController implements CommunityConstant {
      * 其实就是把数据库中这条ticket对应的记录给删除掉
      * 那么即使前端保留着对应的ticket的cookie，在数据库中查找不到对应ticket的记录，那么登录就不会成功
      * 需要重新登录
+     *
+     * 后期我们换成了Redis来存这个ticket数据
      */
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public String logout(@CookieValue("ticket") String ticket){
         userService.logout(ticket);
+
+        //退出登录时，清除SecurityContextHolder中的用户认证信息
+        SecurityContextHolder.clearContext();
         return "redirect:/login";
     }
 

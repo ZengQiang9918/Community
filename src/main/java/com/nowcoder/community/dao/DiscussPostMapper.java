@@ -24,4 +24,13 @@ public interface DiscussPostMapper {
 
     //插入评论的时候，需要更新DiscussPost的comment_count字段
     int updateCommentCount(int id,int commentCount);
+
+    //修改帖子的类型，加精，置顶等
+    int updateType(int id,int type);
+
+    //修改帖子的状态，如删除帖子
+    int updateStatus(int id,int status);
+
+
+
 }

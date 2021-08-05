@@ -30,7 +30,7 @@ public class ESEventConsumer implements CommunityConstant {
 
 
     /**
-     * 消费发帖事件
+     * 消费发帖事件,同时也处理删帖事件，看event的topic字段
      * @param record 传过来的json字符串
      */
     @RabbitHandler
@@ -47,7 +47,13 @@ public class ESEventConsumer implements CommunityConstant {
         }
 
         DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
-        elasticsearchService.saveDiscussPost(post);
+        //如果当前主题是发布帖子，那么saveDiscussPost
+        if(event.getTopic().equals(TOPIC_PUBLISH)){
+            elasticsearchService.saveDiscussPost(post);
+        } else{
+            //否则，表示当前主题是删除帖子
+            elasticsearchService.deleteDiscussPost(post.getId());
+        }
 
     }
 }

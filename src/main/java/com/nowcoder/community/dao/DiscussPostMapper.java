@@ -10,7 +10,10 @@ import java.util.List;
 public interface DiscussPostMapper {
 
     //需要考虑到分页，该帖子的发布者UserId
-    List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit);
+    //还需要根据orderMode判断对帖子的排序
+    //  按时间顺序排序
+    //  按热度顺序排序
+    List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit,int orderMode);
 
     //如果方法只有一个参数，并且在动态sql <if>中使用，必须使用@Param注解
     //注：困惑...
@@ -30,6 +33,9 @@ public interface DiscussPostMapper {
 
     //修改帖子的状态，如删除帖子
     int updateStatus(int id,int status);
+
+    //修改更新帖子的分数
+    int updateScore(int id,double score);
 
 
 

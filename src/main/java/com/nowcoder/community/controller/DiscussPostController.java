@@ -10,7 +10,9 @@ import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
+import com.nowcoder.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,9 @@ public class DiscussPostController implements CommunityConstant {
     @Autowired
     private EventProducer eventProducer;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     /**
      * 发布帖子
@@ -73,6 +78,11 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityId(post.getId());
         //发布事件给ES
         eventProducer.fireESEvent(event);
+
+        //计算帖子的分数，使用set的数据结构
+        //先把帖子存起来
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey,post.getId());
 
 
         // 此时帖子已经插入到数据库中了，返回提示信息即可
@@ -207,6 +217,7 @@ public class DiscussPostController implements CommunityConstant {
 
     /**
      * 加精
+     * 需要对帖子算分
      */
     @RequestMapping(path = "/wonderful", method = RequestMethod.POST)
     @ResponseBody
@@ -220,6 +231,12 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(id);
         eventProducer.fireESEvent(event);
+
+        //计算帖子的分数，使用set的数据结构
+        //先把帖子存起来
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey,id);
+
 
         return CommunityUtil.getJSONString(0);
     }

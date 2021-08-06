@@ -44,6 +44,15 @@ spring:
     virtual-host: community
     port: 5672
 
+  #Spring Task的配置
+  task:
+    execution:
+      pool:
+        core-size: 5    #核心线程
+        max-size: 15    #救济线程
+        queue-capacity: 100
+
+
 
 
 
@@ -67,3 +76,10 @@ logging:
 #community
 community.path.domain: http://localhost:8080
 community.path.upload: d:/allwork/data/upload   #头像文件存放的地址
+
+
+# qiniu的配置
+qiniu.key.access: 2JDAJJSp98nt27fanCPB7GGfCmFtRzWPIkB6GEaG
+qiniu.key.secret: 4yNsEUHVSCChbh2-3Yj1YLqxMY5TeUeTYUbCT_xn
+qiniu.bucket.header.name: zq-community-header      #存储空间
+qiniu.bucket.header.url: http://qxf9rsboe.hb-bkt.clouddn.com    #域名

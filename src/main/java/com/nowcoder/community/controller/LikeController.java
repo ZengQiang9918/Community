@@ -8,7 +8,9 @@ import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
+import com.nowcoder.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,12 +31,16 @@ public class LikeController implements CommunityConstant {
     @Autowired
     private EventProducer eventProducer;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
-     * 帖子的点赞功能
+     * 帖子/评论 的点赞功能
      * entityType:帖子是1;评论是2
      * entityId:如果是帖子，帖子的id;如果是评论，评论的id
      *
-     * 注：用户需要登录之后才能点赞，这个我们之后再处理
+     * 注：用户需要登录之后才能点赞
+     *
      */
     @RequestMapping(value = "/like",method = RequestMethod.POST)
     @ResponseBody
@@ -43,7 +49,6 @@ public class LikeController implements CommunityConstant {
 
         // 点赞
         likeService.like(user.getId(), entityType, entityId,entityUserId);
-
         // 数量
         long likeCount = likeService.findEntityLikeCount(entityType, entityId);
         // 状态
@@ -56,6 +61,7 @@ public class LikeController implements CommunityConstant {
 
         //触发点赞功能，由于该功能点一次的时候是点赞，再点一次是取消赞
         //所以我们只有在点赞时才发消息
+        //将消息发到消息队列中，通知被点赞的一方
         if (likeStatus == 1) {
             Event event = new Event()
                     .setTopic(TOPIC_LIKE)
@@ -66,6 +72,13 @@ public class LikeController implements CommunityConstant {
                     .setData("postId", postId);
             //发送消息
             eventProducer.fireEvent(event);
+        }
+
+
+        //计算帖子的分数，使用set的数据结构
+        if(entityType == ENTITY_TYPE_POST){
+            String redisKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(redisKey,postId);
         }
 
 

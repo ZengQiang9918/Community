@@ -22,8 +22,8 @@ public class DiscussPostService {
     /**
      * 查询指定分页条件下的帖子
      */
-    public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit){
-        return discussPostMapper.selectDiscussPosts(userId,offset,limit);
+    public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit,int orderMode){
+        return discussPostMapper.selectDiscussPosts(userId,offset,limit,orderMode);
     }
 
     /**
@@ -81,6 +81,13 @@ public class DiscussPostService {
      */
     public int updateStatus(int id,int status){
         return discussPostMapper.updateStatus(id,status);
+    }
+
+    /**
+     * 修改帖子的分数
+     */
+    public int updateScore(int id,double score){
+        return discussPostMapper.updateScore(id,score);
     }
 
 }

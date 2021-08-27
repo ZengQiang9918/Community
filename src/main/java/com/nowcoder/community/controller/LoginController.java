@@ -93,7 +93,7 @@ public class LoginController implements CommunityConstant {
                              @PathVariable("code") String code) {
 
 
-        //不管账号是否激活，都将信心存到model中
+        //不管账号是否激活，都将信息存到model中
         int result = userService.activation(userId, code);
         if (result == ACTIVATION_SUCCESS) {
             model.addAttribute("msg", "激活成功,您的账号已经可以正常使用了!");
@@ -130,6 +130,7 @@ public class LoginController implements CommunityConstant {
         session.setAttribute("kaptcha",text);*/
 
         // 验证码的归属,临时给客户端发一个凭证
+        // 采用的是cookie的形式，给这个凭证设置过期时间
         String kaptchaOwner = CommunityUtil.generateUUID();
         Cookie cookie = new Cookie("kaptchaOwner", kaptchaOwner);
         cookie.setMaxAge(60);
@@ -157,7 +158,9 @@ public class LoginController implements CommunityConstant {
     /**
      * 处理登录逻辑
      * 注意，这个只是处理登录请求的，当前端点击登录按钮才会触发完整流程的登录请求
-     * 登录成功后，会把登录记录存在数据库中，把ticket登录凭证存在cookie中
+     * 登录成功后，会把登录记录存在数据库中，把ticket登录凭证存在带过期时间的cookie中,
+     *
+     * 优化后，把这个ticket存在了redis缓存中,不把它存在数据库中
      *
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)

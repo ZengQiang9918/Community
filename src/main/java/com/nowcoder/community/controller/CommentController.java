@@ -54,7 +54,7 @@ public class CommentController implements CommunityConstant {
         commentService.addComment(comment);
 
 
-        //触发评论事件，发送消息
+        //触发评论事件，发送系统消息，通知帖子的用户
         Event event = new Event()
                 .setTopic(TOPIC_COMMENT)
                 .setUserId(hostHolder.getUser().getId())
@@ -69,7 +69,7 @@ public class CommentController implements CommunityConstant {
             Comment target = commentService.findCommentById(comment.getEntityId());
             event.setEntityUserId(target.getUserId());
         }
-        //发布消息
+        //发布系统消息
         eventProducer.fireEvent(event);
 
 

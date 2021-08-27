@@ -131,6 +131,14 @@
             <version>7.2.28</version>
         </dependency>
 
+        <!--Caffeine本地缓存，之所以不用SpringBoot整合是因为使用起来不方便-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+
 
 
 

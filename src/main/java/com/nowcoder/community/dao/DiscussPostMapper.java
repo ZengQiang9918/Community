@@ -10,6 +10,7 @@ import java.util.List;
 public interface DiscussPostMapper {
 
     //需要考虑到分页，该帖子的发布者UserId
+    //  当userId=0,表示获得所有的帖子，当userId!=0,表示获取指定userId的帖子
     //还需要根据orderMode判断对帖子的排序
     //  按时间顺序排序
     //  按热度顺序排序

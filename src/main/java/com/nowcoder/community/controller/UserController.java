@@ -74,7 +74,7 @@ public class UserController implements CommunityConstant {
     /**
      * 账号设置逻辑
      * 转发到setting.html页面
-     * 注意：转发懂setting.html页面之前需要先生成七牛云需要的凭证和文件名
+     * 注意：转发到setting.html页面之前需要先生成七牛云需要的凭证和文件名
      */
     @LoginRequired
     @RequestMapping(value = "/setting",method = RequestMethod.GET)

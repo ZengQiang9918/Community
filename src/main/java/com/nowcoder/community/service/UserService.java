@@ -139,10 +139,12 @@ public class UserService implements CommunityConstant {
             return map;
         }
 
+
         // 注册用户
         // 生成随机盐
         user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
         // 密码的处理方式，将密码和随机盐加密
+        // 数据库中存的密码是加密过后的
         user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));
         user.setType(0);
         user.setStatus(0);
@@ -152,20 +154,21 @@ public class UserService implements CommunityConstant {
         //注意：插入用户之后，用户的用户名ID就自动生成并回填给user
         userMapper.insertUser(user);
 
-        System.out.println("用户ID为："+user.getId());
 
 
         // 固定写法：给邮箱发送激活码
         // 激活邮件
-        //拿到Thymeleaf中的context,给context设置属性
+        // 拿到Thymeleaf中的context,给context设置属性
         Context context = new Context();
         context.setVariable("email", user.getEmail());
         // 我们希望的处理格式：http://localhost:8080/community/activation/101/code
         String url = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
         context.setVariable("url", url);
-        //生成html格式的内容
+        //生成html格式的内容,即返回给用户的邮件是html内容
+        // 参数1是转发的html模板
         String content = templateEngine.process("mail/activation", context);
         mailClient.sendMail(user.getEmail(), "激活账号", content);
+
 
         return map;
     }

@@ -107,6 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                             PrintWriter writer = response.getWriter();
                             writer.write(CommunityUtil.getJSONString(403, "你没有访问此功能的权限!"));
                         } else {
+                            //该请求"/denied"，其实就是响应了404页面
                             response.sendRedirect(request.getContextPath() + "/denied");
                         }
                     }

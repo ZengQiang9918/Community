@@ -99,6 +99,7 @@ public class DataService {
             calendar.add(Calendar.DATE, 1);
         }
 
+
         // 进行OR运算
         // 只要有一天是活跃用户，那么这段时候内该用户就算是活跃用户
         return (long) redisTemplate.execute(new RedisCallback() {

@@ -29,6 +29,7 @@ public class RedisConfig {
         //设置hash的value的序列化方式
         template.setHashValueSerializer(RedisSerializer.json());
 
+
         template.afterPropertiesSet();
         return template;
     }

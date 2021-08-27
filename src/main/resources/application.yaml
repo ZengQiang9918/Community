@@ -9,7 +9,7 @@ server:
 spring:
   #Thymeleaf 模板引擎
   thymeleaf:
-    cache: false     #关闭缓存，开发过程中建议关闭
+    cache: false     #关闭缓存，不然没法看到实时页面
 
   #数据源
   datasource:
@@ -83,3 +83,8 @@ qiniu.key.access: 2JDAJJSp98nt27fanCPB7GGfCmFtRzWPIkB6GEaG
 qiniu.key.secret: 4yNsEUHVSCChbh2-3Yj1YLqxMY5TeUeTYUbCT_xn
 qiniu.bucket.header.name: zq-community-header      #存储空间
 qiniu.bucket.header.url: http://qxf9rsboe.hb-bkt.clouddn.com    #域名
+
+
+#Caffenie本地缓存的配置,自定义配置
+caffeine.posts.max-size: 15          #缓存的帖子的最大数量
+caffeine.posts.expire-seconds: 180      #过期时间 (即可以手动淘汰也可以过期淘汰)
